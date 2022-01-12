@@ -66,6 +66,10 @@ from tensorflow.keras.applications import vgg16 as vgg
 
 
 
+###############################################################################
+#######   2 eme  F A C O N    D E     P R O C E D E R      ####################
+###############################################################################
+
 
 # Pretrained convolutional layers are loaded using the Imagenet weights.
 # Include_top is set to False, in order to exclude the model's fully-connected layers.
@@ -78,7 +82,7 @@ base_model = vgg.VGG16(weights = 'imagenet',
     # Defines how many layers to freeze during training.
     # Layers in the convolutional base are switched from trainable to non-trainable
     # depending on the size of the fine-tuning parameter.
-last = base_model.get_layer('block3_pool').output
+last = base_model.get_layer('block5_pool').output
 
 
 
@@ -99,6 +103,38 @@ top = Dense(num_class, activation = 'softmax')(x)
 
 # Construct our full model now
 model = Model(base_model.input, top)
+
+
+
+###############################################################################
+#######   2 eme  F A C O N    D E     P R O C E D E R      ####################
+###############################################################################
+
+
+
+# Generate a model with all layers (with top)
+vgg16 = VGG16(weights=None, include_top=True)
+
+#Add a layer where input is the output of the  second last layer 
+x = Dense(8, activation='softmax', name='predictions')(vgg16.layers[-2].output)
+
+#Then create the corresponding model 
+my_model = Model(input=vgg16.input, output=x)
+my_model.summary()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
